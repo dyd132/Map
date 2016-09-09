@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.car.mapper.StoreMapper" >
+	<select id="findinsurance" resultType="com.car.entity.Insurance">
+		select * from car_insurance
+	</select>
+	<insert id="addorder" parameterType="com.car.entity.Order">
+		insert into car_order values(null,#{order_uuid},#{order_time},#{order_price})
+	</insert>
+	
+	<select id="addshoping" parameterType="string" resultType="com.car.entity.Insurance">
+		select * from car_insurance where au_id=#{gid}
+	</select>
+</mapper>

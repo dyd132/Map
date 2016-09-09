@@ -1,0 +1,15 @@
+package com.car.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.car.mapper.CarsMapper;
+import com.car.service.CarsService;
+
+@Service("carsservice")
+public class CarsServiceimpl implements CarsService {
+	
+	@Autowired
+	private CarsMapper mapper ;
+	
+}

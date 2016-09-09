@@ -1,0 +1,22 @@
+package com.car.controller;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.car.service.CarsService;
+
+@Controller
+@RequestMapping("car")
+public class CarsController {
+
+	@Resource(name="carsservice")
+	private CarsService cs;
+	
+	@RequestMapping("login")
+	public String login(){
+		
+		return "login";
+	}
+}

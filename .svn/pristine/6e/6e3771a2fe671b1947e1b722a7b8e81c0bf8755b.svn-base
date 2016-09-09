@@ -1,0 +1,195 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="<%=request.getContextPath() %>/css/bootstrap.min.css">
+ <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.8.2.min.js"></script>
+  <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery.validate.js"></script>
+  <link href="<%=request.getContextPath() %>/bootstrap/UAform.css" rel="stylesheet">
+    <script src="<%=request.getContextPath() %>/bootstrap/bootstrap.min.js"></script>
+</head>
+<script type="text/javascript">
+	$(function(){
+		
+		$("#c").click(function(){
+			var s="";
+			$(".a:checked").each(function(){
+				s+=","+$(this).val();
+			});
+			s=s.substring(1);
+		if(s!="")
+			{
+		$.ajax({
+			url:"<%=request.getContextPath()%>/cars/adminpass.do",
+			type:"post",
+			dataType:"json",
+			data:{sd:s},
+			success:function(obj)
+			{
+				if(obj)
+				{
+					alert("设置成功提示用户提交材料!!!!");
+				}
+			}
+			
+		});
+			}
+		else{
+			alert("已经设置成功等待用户提交材料");
+		}
+		});
+		
+		$("#s").click(function(){
+			
+			var ss=	$(this).parent().prev().prev().prev().prev().prev().text();
+			$.ajax({
+				url:"<%=request.getContextPath()%>/cars/getImages.do",
+				type:"post",
+				async:true,
+				dataType:"json",
+				data:{sd:ss},
+				success:function(obj)
+				{
+					if(obj==null)
+					{
+						$("#qqq").empty();
+						$("#qqq").append("用户还没有提交车损图");
+					}
+				else{
+					for(var i in obj )
+					{
+						if(i==0)
+							{
+								$("#qqq").empty();
+								$("#qqq").append("<div class='item active'><img src='"+obj[i].cd_image_url+"'></div>")
+							}
+						else
+							{
+								$("#qqq").append("<div class='item'><img src='"+obj[i].cd_image_url+"'></div>");
+							}
+					}
+				}
+				}
+				
+			});
+		});
+		
+		
+		$("#11").click(function(){
+			
+			
+			if(confirm("确定同意理赔"))
+			{
+				 	location.href="<%=request.getContextPath()%>/cars/wancheng.do";
+			}
+				
+			
+		})
+		
+	});
+</script>
+<body>
+<center>
+	<br/>	<br/>	<br/>
+<form class="well" id="rep" action="">
+        <table  id="proTab" class="table table-bordered table-hover" style="width: 1300px;">
+      <thead>
+        <tr>
+          <th colspan="22">查看用户报案信息</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="seltProdTr"><!--动态表格proTab 下复选框被选择 tr 添加一个类 selProdTr 的背景色-->
+      		<td>用户id</td>
+      		<td>保单号</td>
+      		<td>受保人</td>
+      		<td>身份证信息</td>
+      		<td>报案时间</td>
+      		<td>是否进行处理</td>
+        </tr>
+       <c:forEach items="${report }" var="g">
+       	 <tr class="seltProdTr">
+        	<td>${g.user_id }</td>
+        	<td>${g.rep_policy_id }</td>
+        	<td>${g.rep_insured }</td>
+        	<td>${g.rep_identity }</td>
+        	<td>${g.rep_date }</td>
+        	<c:if test="${g.rep_state==1 }">
+        	<td>
+        		<input type="checkbox" value="${g.user_id }#y" class="a"/>是
+        		<input type="checkbox" value="${g.user_id }#n" class="a"/>否
+        	</td>
+        	</c:if>
+        	<c:if test="${g.rep_state==2 }">
+        	<td>
+        		是
+        		<button data-toggle="modal" data-target="#myModal" id="s" >查看车损材料</button>
+        	</td>
+        	</c:if>
+        	<c:if test="${g.rep_state==-1 }">
+        	<td>
+        		否
+        	</td>
+        	</c:if>
+        	<c:if test="${g.rep_state==3 }">
+        	<td>
+        		已通过理赔正在处理中
+        	</td>
+        	</c:if>
+        </tr>
+       </c:forEach>
+        <tr>
+        	<td colspan="11">
+        		<input type="button" value="确定" id="c"/>
+        	</td>
+        </tr>
+      </tbody>
+    </table> 
+</form> 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<br/><br/><br/><br/><br/><br/>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					<h3>车损图片</h3>
+				</h4>
+			</div>
+			<div class="modal-body">
+			<table  id="proTab" class="table table-bordered table-hover">
+				<div id="myCarousel" class="carousel slide">
+						<!-- 轮播（Carousel）指标 -->
+						<!-- 轮播（Carousel）项目 -->
+						<div class="carousel-inner" id="qqq">
+							
+						
+						</div>
+						<!-- 轮播（Carousel）导航 -->
+						<a class="carousel-control left" href="#myCarousel" 
+						   data-slide="prev">&lsaquo;</a>
+						<a class="carousel-control right" href="#myCarousel" 
+						   data-slide="next">&rsaquo;</a>
+					</div>
+					<tr>
+						<td>
+							<input type="button"value="通过" id="11"/>
+							<input type="button" value="不通过"/>
+						</td>
+					</tr> 	
+				</table>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+
+</center>
+</body>
+</html>

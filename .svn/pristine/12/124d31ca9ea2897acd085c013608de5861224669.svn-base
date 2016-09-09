@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.car.mapper.CarsClaimMapper" >
+		<insert id="saveReport" parameterType="com.car.entity.Report">
+			insert into tb_report 
+			set rep_policy_id=#{rep_policy_id},rep_insured=#{rep_insured},rep_identity=#{rep_identity},rep_date=now(),rep_state=#{rep_state},user_id=#{user_id}
+		</insert>
+		<select id="getReports" resultType="com.car.entity.Report">
+			select rep_id,rep_policy_id,rep_insured,rep_identity,rep_date from tb_report
+		</select>
+		<update id="updateReportState" parameterType="com.car.entity.Report"  >
+			update tb_report set rep_state=#{rep_state} where user_id=#{user_id}
+		</update>
+		<delete id="deleteReport" parameterType="int">
+			delete from tb_report where rep_id=${_parameter}
+		</delete>
+		<insert id="saveCarDamage" parameterType="com.car.entity.CarDamage">
+			insert into tb_car_damage set cd_image_url=#{cd_image_url},rep_id=#{rep_id}
+		</insert>
+		<update id="updataReportsehngfen"  parameterType="com.car.entity.Report" >
+			update tb_report 
+			 set user_id=#{user_id},rep_happened_date=#{rep_happened_date},rep_happened_place=#{rep_happened_place},rep_happened_reason=#{rep_happened_reason} 
+			 where rep_id=#{rep_id}
+		</update>
+		
+		<select id="getReportByRe" parameterType="com.car.entity.Report" resultType="com.car.entity.Report">
+			select * from tb_report where rep_identity=#{rep_identity} and rep_insured=#{rep_insured}  and rep_policy_id=${rep_policy_id}
+		</select>
+		
+		<select id="getReportByUserId" parameterType="int" resultType="com.car.entity.Report">
+			select * from tb_report where user_id=#{user_id}
+		</select>
+		
+		<insert id="saveUploadpictures" parameterType="com.car.entity.CarDamage">
+			insert into  tb_car_damage set cd_image_url=#{cd_image_url},user_id=#{user_id} 
+		</insert>
+		
+		<!-- 根据登录账号密码去查询数据 -->
+		<select id="getCarUserByUser" resultType="com.car.entity.CarUser" parameterType="com.car.entity.CarUser">
+			select * from car_user where user_name=#{user_name} and user_pwd=#{user_pwd}
+		</select>
+		
+		<!--查询办案信息  -->
+		<select id="getReportList" resultType="com.car.entity.Report">
+			select * from tb_report
+		</select>
+		
+		<!-- 管理员确定报案失败删除 -->
+		<delete id="deleteByCarUser" parameterType="int">
+			delete from tb_report where user_id=#{user_id}
+		</delete>
+		
+		<!--用户完善信息  -->
+		<update id="updateReport" parameterType="com.car.entity.Report">
+			update tb_report  set  rep_happened_place=#{rep_happened_place},rep_happened_date=#{rep_happened_date},rep_happened_reason=#{rep_happened_reason} where user_id=#{user_id}
+		</update>
+		
+		<!-- 查询图片 -->
+		<select id="getImagesByUserId" parameterType="int" resultType="com.car.entity.CarDamage">
+			select * from tb_car_damage where user_id=#{user_id}
+		</select>
+</mapper>

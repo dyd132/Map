@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.car.mapper.CarStoreMapper" >
+	
+	<select id="getUserInfo" resultType="com.car.entity.User">
+		select * from car_user where user_name=#{user_name};
+	</select>
+	
+	<select id="getUserDatagrid" resultType="com.car.entity.User">
+	select * from car_user where user_state=0 and (user_name like '%${search}%'
+	 or user_pwd like '%${search}%' or user_mail like '%${search}%') limit #{start},#{pageSize};
+	</select>
+	
+	<delete id="delUser">
+		delete from car_user where  user_id=#{q};
+	</delete>
+	
+	<select id="getCount" resultType="int">
+		select count(*) from car_user where user_state=0 and (user_name like '%${search}%'
+	 or user_pwd like '%${search}%' or user_mail like '%${search}%');
+	</select>
+	
+	<select id="getAllUserInfo" resultType="com.car.entity.User">
+		select * from car_user where user_state=0;
+	</select>
+</mapper>
